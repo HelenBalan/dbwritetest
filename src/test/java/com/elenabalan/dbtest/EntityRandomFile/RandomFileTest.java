@@ -1,5 +1,6 @@
 package com.elenabalan.dbtest.EntityRandomFile;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,13 +15,20 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SecureRandom.class, RandomFile.class})
+@PrepareForTest({SecureRandom.class, RandomFile.class, File.class, FileUtils.class})
 public class RandomFileTest {
 
     private SecureRandom mockRundom;
+    private File file;
+
+    private final long size = 1000;
+    private final String dirName = "testfolder";
 
     @Before
     public void setUp() throws Exception {
@@ -35,32 +43,47 @@ public class RandomFileTest {
     }
 
     @Test
-    public void createFile() throws Exception {
-
-        final long size = 1000;
-        final long maxSize = size*2;
-        final String dirName = "testfolder";
+    public void createFile() {
 
         File newDir = new File(dirName);
         newDir.mkdir();
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             File newFile;
             newFile = RandomFile.createFile(size, dirName);
             assertTrue(newFile.exists());
             long realSize = newFile.length();
             newFile.delete();
-            assertTrue(realSize == size*i);
+            assertTrue(realSize == size * i);
         }
+    }
 
+    @Test(expected = RuntimeException.class)
+    public void createFileCreationException() throws Exception {
+
+        PowerMockito.mockStatic(File.class);
+
+        PowerMockito.doThrow(new RuntimeException()).when(File.class,"createTempFile",anyString(), anyString(), anyObject());
+
+        File newFile = RandomFile.createFile(size, dirName);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void createFileFillException() throws Exception {
+
+        PowerMockito.mockStatic(FileUtils.class);
+
+        PowerMockito.doThrow(new RuntimeException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+
+        File newFile = RandomFile.createFile(size, dirName);
     }
 
     @Test
-   public void createFiles() throws Exception {
+   public void createFiles() {
 
         final int numberOfFile = 1000;
         final String dirName = "testfolder";
 
-        List<File> files = new ArrayList<>();
+        List<File> files;
         files = RandomFile.createFiles(1000,numberOfFile,dirName);
         int realNumber = files.size();
         assertEquals(realNumber,numberOfFile);
