@@ -1,4 +1,4 @@
-package com.elenabalan.dbtest.Dao;
+package com.elenabalan.dbtest.dao;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;

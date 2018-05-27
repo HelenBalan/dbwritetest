@@ -1,4 +1,4 @@
-package com.elenabalan.dbtest.EntityRandomFile;
+package com.elenabalan.dbtest.entityRandomFile;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -10,14 +10,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -46,13 +44,17 @@ public class RandomFileTest {
     public void createFile() {
 
         File newDir = new File(dirName);
-        newDir.mkdir();
+        boolean isDir = newDir.mkdir();
+
         for (int i = 0; i < 3; i++) {
             File newFile;
             newFile = RandomFile.createFile(size, dirName);
             assertTrue(newFile.exists());
             long realSize = newFile.length();
-            newFile.delete();
+            boolean isFileDeleted = newFile.delete();
+            if(!isFileDeleted) {
+                throw new RuntimeException("Can't delete file "+ newFile.getName());
+            }
             assertTrue(realSize == size * i);
         }
     }

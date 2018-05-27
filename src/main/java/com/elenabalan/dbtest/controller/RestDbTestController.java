@@ -1,9 +1,7 @@
-package com.elenabalan.dbtest.Controller;
+package com.elenabalan.dbtest.controller;
 
-import com.elenabalan.dbtest.EntityRandomFile.Result;
-import com.elenabalan.dbtest.Service.DbTestService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import com.elenabalan.dbtest.entityRandomFile.Result;
+import com.elenabalan.dbtest.service.DbTestService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,4 +1,4 @@
-package com.elenabalan.dbtest.EntityRandomFile;
+package com.elenabalan.dbtest.entityRandomFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class RandomFile {
         } catch (IOException e) {
             throw new RuntimeException("Sorry, can't write to file " + file.getName());
         } catch (NullPointerException e){
-            if (file == null) throw new RuntimeException("Sorry, file is null :(");
+            if (data == null) throw new RuntimeException("Sorry, data is null :(");
         }
         return file;
     }
