@@ -1,5 +1,9 @@
 package com.elenabalan.dbtest.service;
 
 public class DbTestService {
-   /* not implemented */
+
+    public void makesmth() {
+        /* not implemented */
+    }
+
 }

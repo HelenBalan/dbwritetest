@@ -12,13 +12,13 @@ import java.nio.file.Paths;
 @Qualifier("fakeData")
 public class FakeTestWriteDao implements TestWriteDao {
 
-    private static final String dirName = "testdata";
-    private static final Path dir = Paths.get(dirName);
+    private static final String DIR_NAME = "testdata";
+    private static final Path DIR = Paths.get(DIR_NAME);
 
     @Override
     public void putFile(Path file) {
 
-         Path newFile = dir.resolveSibling(file.getFileName());
+         Path newFile = DIR.resolveSibling(file.getFileName());
          try {
              Files.copy(file, newFile);
          } catch (IOException e) {

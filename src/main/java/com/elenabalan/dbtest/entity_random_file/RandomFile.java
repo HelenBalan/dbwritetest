@@ -31,7 +31,7 @@ public class RandomFile {
         } catch (IOException e) {
             throw new IllegalStateException("Sorry, can't write to file " + file.getName());
         } catch (NullPointerException e){
-            if (data == null) throw new RuntimeException("Sorry, data is null :(");
+            if (data == null) throw new IllegalStateException("Sorry, data is null :(");
         }
         return file;
     }
