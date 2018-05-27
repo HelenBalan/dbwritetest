@@ -1,4 +1,4 @@
-package com.elenabalan.dbtest.entityRandomFile;
+package com.elenabalan.dbtest.entity_random_file;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
 public class RandomFile {
+
+    private RandomFile(){}
+
     static File createFile(long size, String dirName){
 
         File dir = new File(dirName);
@@ -16,7 +19,7 @@ public class RandomFile {
         try {
             file = File.createTempFile(prefix,"",dir);
         } catch (IOException e) {
-            throw new RuntimeException("Sorry, can't create file into " + dir.getName());
+            throw new IllegalStateException("Sorry, can't create file into " + dir.getName());
         }
 
         SecureRandom dataRandomGenerator = new SecureRandom();
@@ -26,7 +29,7 @@ public class RandomFile {
         try {
             FileUtils.writeByteArrayToFile(file, data);
         } catch (IOException e) {
-            throw new RuntimeException("Sorry, can't write to file " + file.getName());
+            throw new IllegalStateException("Sorry, can't write to file " + file.getName());
         } catch (NullPointerException e){
             if (data == null) throw new RuntimeException("Sorry, data is null :(");
         }

@@ -1,4 +1,4 @@
-package com.elenabalan.dbtest.entityRandomFile;
+package com.elenabalan.dbtest.entity_random_file;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;

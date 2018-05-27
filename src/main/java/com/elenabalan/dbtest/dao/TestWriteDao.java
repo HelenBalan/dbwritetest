@@ -4,8 +4,8 @@ import java.nio.file.Path;
 
 public interface TestWriteDao {
 
-    void PutFile(Path path);
+    void putFile(Path path);
 
-    void ClearDB();
+    void clearDB();
 
 }

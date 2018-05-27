@@ -12,22 +12,22 @@ import java.nio.file.Paths;
 @Qualifier("fakeData")
 public class FakeTestWriteDao implements TestWriteDao {
 
-    final private String dirName = "testdata";
-    final private Path dir = Paths.get(dirName);
+    private static final String dirName = "testdata";
+    private static final Path dir = Paths.get(dirName);
 
     @Override
-    public void PutFile(Path file) {
+    public void putFile(Path file) {
 
          Path newFile = dir.resolveSibling(file.getFileName());
          try {
              Files.copy(file, newFile);
          } catch (IOException e) {
-             throw new RuntimeException("Sorry, can't copy " + file.getFileName() + " to " + newFile.getFileName());
+             throw new IllegalStateException("Sorry, can't copy " + file.getFileName() + " to " + newFile.getFileName());
          }
     }
 
     @Override
-    public void ClearDB() {
-
+    public void clearDB() {
+        /* not implemented */
     }
 }

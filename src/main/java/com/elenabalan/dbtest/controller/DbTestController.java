@@ -1,6 +1,6 @@
 package com.elenabalan.dbtest.controller;
 
-import com.elenabalan.dbtest.entityRandomFile.Result;
+import com.elenabalan.dbtest.entity_random_file.Result;
 
 public interface DbTestController {
 
