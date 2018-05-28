@@ -9,13 +9,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -59,22 +59,31 @@ public class RandomFileTest {
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalStateException.class)
     public void createFileCreationException() throws Exception {
 
         PowerMockito.mockStatic(File.class);
 
-        PowerMockito.doThrow(new IllegalStateException()).when(File.class,"createTempFile",anyString(), anyString(), anyObject());
-
+        PowerMockito.when(File.createTempFile(anyString(),anyString(),anyObject())).thenThrow(new IOException());
         File newFile = RandomFile.createFile(size, dirName);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalStateException.class)
     public void createFileFillException() throws Exception {
 
         PowerMockito.mockStatic(FileUtils.class);
 
-        PowerMockito.doThrow(new IllegalStateException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+        PowerMockito.doThrow(new IOException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+
+        File newFile = RandomFile.createFile(size, dirName);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void createFileEmptyException() throws Exception {
+
+        PowerMockito.mockStatic(FileUtils.class);
+
+        PowerMockito.doThrow(new NullPointerException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
 
         File newFile = RandomFile.createFile(size, dirName);
     }

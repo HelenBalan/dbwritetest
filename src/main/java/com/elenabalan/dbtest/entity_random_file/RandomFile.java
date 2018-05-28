@@ -15,7 +15,7 @@ public class RandomFile {
 
         File dir = new File(dirName);
         File file;
-        String prefix = Thread.currentThread().getName();
+        String prefix = "pre" + Thread.currentThread().getName();
         try {
             file = File.createTempFile(prefix,"",dir);
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class RandomFile {
         } catch (IOException e) {
             throw new IllegalStateException("Sorry, can't write to file " + file.getName());
         } catch (NullPointerException e){
-            if (data == null) throw new IllegalStateException("Sorry, data is null :(");
+            if (data.length==0) throw new IllegalStateException("Sorry, data is null :(");
         }
         return file;
     }
