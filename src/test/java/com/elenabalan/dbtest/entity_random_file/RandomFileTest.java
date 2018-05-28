@@ -11,6 +11,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,11 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SecureRandom.class, RandomFile.class, File.class, FileUtils.class})
+@PrepareForTest({SecureRandom.class, RandomFile.class, File.class, FileUtils.class, Files.class})
 public class RandomFileTest {
 
     private SecureRandom mockRundom;
@@ -77,7 +80,7 @@ public class RandomFileTest {
 
         PowerMockito.mockStatic(FileUtils.class);
 
-        PowerMockito.doThrow(new IOException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+        doThrow(new IOException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
 
         File newFile = RandomFile.createFile(size, dirName);
     }
@@ -87,7 +90,7 @@ public class RandomFileTest {
 
         PowerMockito.mockStatic(FileUtils.class);
 
-        PowerMockito.doThrow(new NullPointerException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+        doThrow(new NullPointerException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
 
         File newFile = RandomFile.createFile(size, dirName);
     }
@@ -105,39 +108,38 @@ public class RandomFileTest {
     }
 
     @Test
-    public void clearFiles() {
+    public void clearFiles() throws Exception {
 
         final int numberOfFiles = 10;
         final String testName = "testName";
 
+        PowerMockito.mockStatic(Files.class);
+
         List<File> files = new ArrayList<>();
         for(int i=0;i<numberOfFiles;i++){
-            File file = PowerMockito.mock(File.class);
-            when(file.delete()).thenReturn(true);
-            files.add(file);
+            files.add(new File(testName+i));
         }
         RandomFile.clearFiles(files);
-        for (File file:files) {
-            verify(file, times(1)).delete();
-        }
+        verifyStatic(Files.class,times(numberOfFiles));
+        Files.delete(anyObject());
     }
 
     @Test(expected = IllegalStateException.class)
-    public void clearFilesError() {
+    public void clearFilesError() throws Exception {
 
         final int numberOfFiles = 10;
         final String testName = "testName";
 
+        PowerMockito.mockStatic(Files.class);
+
         List<File> files = new ArrayList<>();
         for(int i=0;i<numberOfFiles;i++){
-            File file = PowerMockito.mock(File.class);
-            if(i == numberOfFiles-1) {
-                when(file.delete()).thenReturn(false);
-            } else {
-                when(file.delete()).thenReturn(true);
-            }
-            files.add(file);
+            files.add(new File(testName+i));
         }
+
+        doThrow(new IOException()).when(Files.class);
+        Files.delete(anyObject());
+
         RandomFile.clearFiles(files);
     }
 

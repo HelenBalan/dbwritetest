@@ -2,6 +2,7 @@ package com.elenabalan.dbtest.entity_random_file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,11 @@ public class RandomFile {
     static void clearFiles(List<File> list){
 
         for(File file: list) {
-            if(!file.delete()) {
-                throw new IllegalStateException("Can't delete file "+ file.getName());
+            Path path = Paths.get(file.toURI());
+            try {
+                Files.delete(path);
+            } catch (IOException e){
+                throw new IllegalStateException("Can't delete file "+ file.getName() + ": " + e.getMessage());
             }
         }
     }
