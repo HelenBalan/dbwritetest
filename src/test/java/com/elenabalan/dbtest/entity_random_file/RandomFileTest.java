@@ -1,6 +1,7 @@
 package com.elenabalan.dbtest.entity_random_file;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,14 +39,14 @@ public class RandomFileTest {
         when(mockRundom.generateSeed(2000)).thenReturn(new byte[2000]);
 
         PowerMockito.whenNew(SecureRandom.class).withNoArguments().thenReturn(mockRundom);
+
+        File newDir = new File(dirName);
+        boolean isDir = newDir.mkdir();
     }
 
     @Test
     public void createFile() {
-
-        File newDir = new File(dirName);
-        boolean isDir = newDir.mkdir();
-
+        
         for (int i = 0; i < 3; i++) {
             File newFile;
             newFile = RandomFile.createFile(size, dirName);
@@ -98,5 +99,15 @@ public class RandomFileTest {
         files = RandomFile.createFiles(1000,numberOfFile,dirName);
         int realNumber = files.size();
         assertEquals(realNumber,numberOfFile);
+    }
+
+    @After
+    public void tearDown() {
+        File newDir = new File(dirName);
+        try {
+            FileUtils.deleteDirectory(newDir);
+        } catch (IOException e) {
+            throw new IllegalStateException("Cant' delete dir " + dirName);
+        }
     }
 }
