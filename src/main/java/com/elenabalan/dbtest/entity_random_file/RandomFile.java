@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -45,5 +46,14 @@ public class RandomFile {
         }
 
         return list;
+    }
+
+    static void clearFiles(List<File> list){
+
+        for(File file: list) {
+            if(!file.delete()) {
+                throw new IllegalStateException("Can't delete file "+ file.getName());
+            }
+        }
     }
 }

@@ -12,11 +12,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -46,7 +49,7 @@ public class RandomFileTest {
 
     @Test
     public void createFile() {
-        
+
         for (int i = 0; i < 3; i++) {
             File newFile;
             newFile = RandomFile.createFile(size, dirName);
@@ -99,6 +102,43 @@ public class RandomFileTest {
         files = RandomFile.createFiles(1000,numberOfFile,dirName);
         int realNumber = files.size();
         assertEquals(realNumber,numberOfFile);
+    }
+
+    @Test
+    public void clearFiles() {
+
+        final int numberOfFiles = 10;
+        final String testName = "testName";
+
+        List<File> files = new ArrayList<>();
+        for(int i=0;i<numberOfFiles;i++){
+            File file = PowerMockito.mock(File.class);
+            when(file.delete()).thenReturn(true);
+            files.add(file);
+        }
+        RandomFile.clearFiles(files);
+        for (File file:files) {
+            verify(file, times(1)).delete();
+        }
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void clearFilesError() {
+
+        final int numberOfFiles = 10;
+        final String testName = "testName";
+
+        List<File> files = new ArrayList<>();
+        for(int i=0;i<numberOfFiles;i++){
+            File file = PowerMockito.mock(File.class);
+            if(i == numberOfFiles-1) {
+                when(file.delete()).thenReturn(false);
+            } else {
+                when(file.delete()).thenReturn(true);
+            }
+            files.add(file);
+        }
+        RandomFile.clearFiles(files);
     }
 
     @After
