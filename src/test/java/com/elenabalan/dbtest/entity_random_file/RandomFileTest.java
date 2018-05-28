@@ -53,7 +53,7 @@ public class RandomFileTest {
             long realSize = newFile.length();
             boolean isFileDeleted = newFile.delete();
             if(!isFileDeleted) {
-                throw new RuntimeException("Can't delete file "+ newFile.getName());
+                throw new IllegalStateException("Can't delete file "+ newFile.getName());
             }
             assertTrue(realSize == size * i);
         }
@@ -64,7 +64,7 @@ public class RandomFileTest {
 
         PowerMockito.mockStatic(File.class);
 
-        PowerMockito.doThrow(new RuntimeException()).when(File.class,"createTempFile",anyString(), anyString(), anyObject());
+        PowerMockito.doThrow(new IllegalStateException()).when(File.class,"createTempFile",anyString(), anyString(), anyObject());
 
         File newFile = RandomFile.createFile(size, dirName);
     }
@@ -74,7 +74,7 @@ public class RandomFileTest {
 
         PowerMockito.mockStatic(FileUtils.class);
 
-        PowerMockito.doThrow(new RuntimeException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
+        PowerMockito.doThrow(new IllegalStateException()).when(FileUtils.class,"writeByteArrayToFile",anyObject(), anyObject());
 
         File newFile = RandomFile.createFile(size, dirName);
     }
