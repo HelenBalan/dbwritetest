@@ -1,11 +1,14 @@
 package com.elenabalan.dbtest.dao;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public interface TestWriteDao {
 
-    void putFile(Path path);
+    void putFiles(List<File> files) throws SQLException, IOException;
 
-    void clearDB();
+    void clearDB() throws SQLException;
 
 }

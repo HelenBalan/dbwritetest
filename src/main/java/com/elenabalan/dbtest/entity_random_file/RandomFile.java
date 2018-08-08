@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -38,9 +39,11 @@ public class RandomFile {
         return file;
     }
 
-    static ArrayList<File> createFiles(int size, int number, String dirName){
+    static List<File> createFiles(int size, int number, String dirName){
 
-        ArrayList<File> list = new ArrayList<>();
+        new File(dirName).mkdirs();
+
+        List<File> list = new LinkedList<>();
 
         for(int i=0; i<number; i++){
             list.add(createFile(size, dirName));

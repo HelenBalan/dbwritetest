@@ -62,7 +62,7 @@ public class RandomFileTest {
             if(!isFileDeleted) {
                 throw new IllegalStateException("Can't delete file "+ newFile.getName());
             }
-            assertTrue(realSize == size * i);
+            assertEquals(size * i, realSize);
         }
     }
 
@@ -149,7 +149,7 @@ public class RandomFileTest {
         try {
             FileUtils.deleteDirectory(newDir);
         } catch (IOException e) {
-            throw new IllegalStateException("Cant' delete dir " + dirName);
+            throw new IllegalStateException("Can't delete dir " + dirName);
         }
     }
 }
