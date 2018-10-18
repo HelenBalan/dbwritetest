@@ -1,6 +1,7 @@
 package com.elenabalan.dbtest.entity_random_file;
 
 import com.elenabalan.dbtest.dao.PostgresTestWriteDao;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,12 @@ public class PostgresTestWriteDaoTest {
     @Test
     public void putFiles() throws SQLException, IOException {
         dao = new PostgresTestWriteDao();
-        dao.putFiles(files);
+        List<byte[]> data = new LinkedList<>();
+        int i = 0;
+        for (File file : files) {
+            data.add(FileUtils.readFileToByteArray(file));
+        }
+        dao.putFiles(data);
         assertNotNull(dao);
         assertNotNull(dao.getConnection());
         dao.clearDB();

@@ -24,18 +24,14 @@ public class PostgresTestWriteDao implements TestWriteDao{
     }
 
     @Override
-    public void putFiles(List<File> files) throws SQLException, IOException {
+    public void putFiles(List<byte[]> data) throws SQLException, IOException {
 
         String createTable = "CREATE TABLE " + tableName + " (" +
                 "file bytea" +
                 ")";
         Statement stmt = getConnection().createStatement();
         stmt.executeUpdate(createTable);
-        List<byte[]> data = new LinkedList<>();
-        int i = 0;
-        for (File file : files) {
-            data.add(FileUtils.readFileToByteArray(file));
-        }
+
         PreparedStatement pstmt = connection.prepareStatement("INSERT INTO "+ tableName + " (file) VALUES (?)");
         for (byte[] dataFile : data){
             pstmt.setBytes(1,dataFile);

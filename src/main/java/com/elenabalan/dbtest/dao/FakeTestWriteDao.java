@@ -3,7 +3,6 @@ package com.elenabalan.dbtest.dao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,7 +28,7 @@ public class FakeTestWriteDao implements TestWriteDao {
     }
 
     @Override
-    public void putFiles(List<File> files) throws SQLException {
+    public void putFiles(List<byte[]> data) throws SQLException {
 
     }
 
